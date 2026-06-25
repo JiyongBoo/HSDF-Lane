@@ -68,7 +68,7 @@ Download the height map data from the following link:
 [https://huggingface.co/datasets/boo0828/HSDF-Lane_heightmap](https://huggingface.co/datasets/boo0828/HSDF-Lane_heightmap)
 
 ```bash
-cd <your_workspace>/dataset/openlane
+cd <your_workspace>/dataset/Apollo_Sim_3D_Lane_Release
 huggingface-cli download boo0828/HSDF-Lane_heightmap apollo_heightmap.tar --local-dir .
 tar -xvf apollo_heightmap.tar
 ```

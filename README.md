@@ -11,6 +11,9 @@
   <a href="https://jiyongboo.github.io/HSDF-Lane-project-page/" target='_blank'>
     <img src="https://img.shields.io/badge/Project-Page-blue">
   </a>
+  <a href="https://huggingface.co/boo0828/HSDF-Lane" target='_blank'>
+    <img src="https://img.shields.io/badge/🤗-Hugging%20Face-yellow">
+  </a>
 </p>
 
 
