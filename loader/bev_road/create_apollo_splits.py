@@ -16,9 +16,9 @@ illus_chg   : train = exclude /00/,/01/,/06/,/07/
               val   = /00/,/01/,/06/,/07/ 
 
 ------
-python tools/create_apollo_splits.py
-python tools/create_apollo_splits.py --seed 42 --batch_size 8
-python tools/create_apollo_splits.py --src /path/to/laneline_label.json
+python create_apollo_splits.py
+python create_apollo_splits.py --seed 42 --batch_size 8
+python create_apollo_splits.py --src /path/to/laneline_label.json
 """
 
 import os

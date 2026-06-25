@@ -46,13 +46,13 @@ bev_shape = (
     int((y_range[1] - y_range[0]) / meter_per_pixel),
 )
 
-loader_args = dict(batch_size=16, num_workers=16)
-val_loader_args = dict(batch_size=16, num_workers=16)
+loader_args = dict(batch_size=8, num_workers=8)
+val_loader_args = dict(batch_size=8, num_workers=8)
 
 # validation post-processing parameters
-post_conf = -1.7
-post_emb_margin = 6.0
-post_min_cluster_size = 15
+post_conf = -1.5
+post_emb_margin = 6.5
+post_min_cluster_size = 10
 
 
 # ═════════════════════════════════════════════════════════════

@@ -1,83 +1,25 @@
-# HSDF-Lane
+<br />
+<p align="center">
+  
+  <h3 align="center"><strong>HSDF-Lane: Height-Aligned Signed Distance Field with Semantic Lane Prior for 3D Lane Detection</strong></h3>
 
-Official implementation of **HSDF-Lane** (ECCV 2026)
+<p align="center">
+  <a href="" target='_blank'>
+    <!-- <img src="https://img.shields.io/badge/arXiv-%F0%9F%93%83-yellow"> -->
+    <img src="https://img.shields.io/badge/arXiv-Paper-red">
+  </a>
+  <a href="https://jiyongboo.github.io/HSDF-Lane-project-page/" target='_blank'>
+    <img src="https://img.shields.io/badge/Project-Page-blue">
+  </a>
+</p>
 
-[![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://parkchaesong.github.io/sclane/)
-[![arXiv](https://img.shields.io/badge/arXiv-Paper-red)](https://arxiv.org/abs/2508.10411)
 
----
-
-### Overview
-
-**HSDF-Lane: Height-Aligned Signed Distance Field with Semantic Lane Prior for 3D Lane Detection**
-
-TBD
-
----
-
-### 0. Dataset Preparation
-
-#### Step 1: Download OpenLane Dataset
-
-Follow the instructions from the [OpenLane Dataset README](https://github.com/OpenDriveLab/OpenLane/blob/main/data/README.md) to download the full dataset.
-
-After downloading, your directory structure should look like:
-
-```
-<root>/openlane/
-├── images/
-├── training/
-└── validation/
-```
-
-#### Step 2: Download Height Map Data
-
-Download the height map data from the following link:
-[https://147.46.111.77:1402/sharing/jplpr7ROl](https://147.46.111.77:1402/sharing/jplpr7ROl)
-
-Unzip the archive to get a folder named `Openlane_height`. Inside it, you will find folders such as:
-
-```
-Openlane_height/
-├── heightmap_training/
-└── heightmap_validation/
-```
-
-Move these two folders into the previously created `openlane/` folder so that the final structure is:
-
-```
-<root>/openlane/
-├── images/
-├── training/
-├── validation/
-├── heightmap_training/
-└── heightmap_validation/
-```
-
-#### Step 3: Update Configuration
-
-Set the paths to your `<root>/openlane` directory in `tools/sc_lane_config.py`:
-
-```python
-train_gt_paths = '/path/to/openlane/training'
-train_image_paths = '/path/to/openlane/images/training'
-train_map_paths = '/path/to/Waymo/map_data_training'
-val_gt_paths = '/path/to/openlane/validation'
-val_image_paths = '/path/to/openlane/images/validation'
-val_map_paths = '/path/to/Waymo/map_data_validation'
-```
+This is the official implementation of **HSDF-Lane** (ECCV 2026).
 
 ---
 
-### Directory Structure
-
-To ensure everything works correctly, clone the repositories under a common parent directory like this:
-
-```
-<your_workspace>/
-├── Deformable-DETR/
-└── SC-Lane/
-```
+### Dataset Preparation
+Please follow [data preparation](./docs/data_preparation.md) to download dataset.
 
 ---
 
@@ -86,74 +28,108 @@ To ensure everything works correctly, clone the repositories under a common pare
 #### 1. Clone this repository:
 
 ```bash
-git clone https://github.com/parkchaesong/SC-Lane.git
+git clone https://github.com/JiyongBoo/HSDF-Lane
 ```
 
-#### 2. Clone the required dependency (Deformable-DETR) **in the same parent directory**:
+#### 2. Create a virtual environment:
 
 ```bash
+cd ./HSDF-Lane
+conda create -n hsdflane python=3.8.20
+pip install -r requirement.txt
+conda install -c conda-forge cudatoolkit-dev=11.1
+```
+
+#### 3. Clone the required dependency (Deformable-DETR) **in the same parent directory**:
+
+```bash
+cd ..
 git clone https://github.com/fundamentalvision/Deformable-DETR.git
 ```
 
-#### 3. Compile CUDA operators:
+Place both repositories under the same parent directory as follows:
 
-Navigate to the operators directory and compile the necessary CUDA operators:
+```
+<your_workspace>/
+├── dataset/
+├── Deformable-DETR/
+└── HSDF-Lane/
+```
+
+#### 4. Compile CUDA operators:
+
+Build the CUDA operators from the Deformable-DETR ops directory:
 
 ```bash
-cd Deformable-DETR/models/ops
+export CUDA_HOME=$CONDA_PREFIX
+export PATH=$CUDA_HOME/bin:$PATH
+export LD_LIBRARY_PATH=$CUDA_HOME/lib:$LD_LIBRARY_PATH
+
+cd ./Deformable-DETR/models/ops
 sh ./make.sh
 ```
 
-#### 4. Install Python dependencies:
-
-Return to the SC-Lane root directory and install the required packages:
-
+#### 5. Additional Requirements:
 ```bash
-cd ../../../SC-Lane
-pip install -r requirement.txt
+pip install setuptools==69.5.1 wheel ninja Cython
 ```
 
 ---
 
-### Usage
+### Eval
 
-#### Pretrained Checkpoint
-
+#### Pretrained Checkpoints
 Download the pretrained model from the following link:
-[https://drive.google.com/file/d/1UwiKDp8WzGMRd_cLYOdCs8jiuqKQ6i4Z](https://drive.google.com/file/d/1UwiKDp8WzGMRd_cLYOdCs8jiuqKQ6i4Z/view?usp=sharing)
+[https://huggingface.co/boo0828/HSDF-Lane](https://huggingface.co/boo0828/HSDF-Lane)
 
-Place the downloaded file in the project root directory:
+```bash
+cd <your_workspace>/HSDF-Lane/
+huggingface-cli download boo0828/HSDF-Lane <ckpt_name> --local-dir ./
+```
 
-```
-SC-Lane/
-└── ckpt.pth
-```
+| Dataset | ckpt_name | Metrics | 
+| - | - | - | 
+| OpenLane-1000 | [hsdflane.pth](https://huggingface.co/boo0828/HSDF-Lane/resolve/main/hsdflane.pth?download=true) | F1=66.3% | 
+| OpenLane-1000 (FPN version) | [hsdflane_fpn.pth](https://huggingface.co/boo0828/HSDF-Lane/resolve/main/hsdflane_fpn.pth?download=true) | F1=66.9% | 
+| Apollo-standard,rare | [hsdflane_apollo_standard.pth](https://huggingface.co/boo0828/HSDF-Lane/resolve/main/hsdflane_apollo_standard.pth?download=true) | F1=98.8% | 
+| Apollo-illus_chg| [hsdflane_apollo_illus_chg.pth](https://huggingface.co/boo0828/HSDF-Lane/resolve/main/hsdflane_apollo_illus_chg.pth?download=true) | F1=97.9% | 
+
 
 #### Validation
 
-Once the dataset and pretrained checkpoint are ready, run:
+With the dataset and checkpoint in place, run:
 
 ```bash
-python tools/val.py
+cd <your_workspace>/HSDF-Lane/
+python tools/val_openlane.py \\
+    --config ./tools/hsdflane_config.py \\
+    --checkpoint ./hsdflane.pth 
 ```
 
-This will evaluate the model on the OpenLane validation set using the pretrained checkpoint.
+This runs evaluation on the OpenLane validation set.
 
-To also log results to Weights & Biases:
+To evaluate the model on the Apollo dataset, run:
 
 ```bash
-python tools/val.py --wandb
+cd <your_workspace>/HSDF-Lane/
+python tools/val_apollo.py \\
+    --config ./tools/hsdflane_apollo_config.py \\
+    --checkpoint ./hsdflane_apollo_standard.pth 
 ```
 
-#### Training
+### Train
 
-To train SC-Lane from scratch:
+To train HSDF-Lane from scratch:
 
 ```bash
-python tools/train.py
+cd <your_workspace>/HSDF-Lane/
+# OpenLane
+python tools/train_openlane.py \\
+    --config ./tools/hsdflane_config.py
+# Apollo
+python tools/train_apollo.py \\
+    --config ./tools/hsdflane_apollo_config.py
 ```
-
-Training config (learning rate, epochs, batch size, etc.) is defined in `tools/sc_lane_config.py`. Checkpoints are saved to the path specified by `model_save_path` in the config (default: `./checkpoints/sc_lane/`).
 
 ---
 
@@ -172,4 +148,4 @@ This repository builds upon
 * [**HeightLane**](https://github.com/parkchaesong/HeightLane)
 * [**SC-Lane**](https://github.com/parkchaesong/SC-Lane)
 
-
+We are grateful to the authors of these works for providing the foundation for our project.
