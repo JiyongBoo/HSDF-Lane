@@ -4,7 +4,7 @@
   <h3 align="center"><strong>HSDF-Lane: Height-Aligned Signed Distance Field with Semantic Lane Prior for 3D Lane Detection</strong></h3>
 
 <p align="center">
-  <a href="" target='_blank'>
+  <a href="https://arxiv.org/abs/2606.31172" target='_blank'>
     <!-- <img src="https://img.shields.io/badge/arXiv-%F0%9F%93%83-yellow"> -->
     <img src="https://img.shields.io/badge/arXiv-Paper-red">
   </a>
@@ -139,7 +139,15 @@ python tools/train_apollo.py \\
 ### Citation
 
 ```
-TBD
+@misc{boo2026hsdflaneheightalignedsigneddistance,
+      title={HSDF-Lane: Height-Aligned Signed Distance Field with Semantic Lane Prior for 3D Lane Detection}, 
+      author={Jiyong Boo and Byeongin Joung and Hyemin Yang and Kuk-Jin Yoon},
+      year={2026},
+      eprint={2606.31172},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2606.31172}, 
+}
 ```
 
 ---
